@@ -13,13 +13,25 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
+
+// Default route for Vercel
+app.get('/', (req, res) => {
+  res.send('Hello to Vercel!');
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export the app (for Vercel compatibility)
+module.exports = app;
+
+// Local server for development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000; // Default port for local development
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
