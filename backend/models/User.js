@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
   request: {
     type: String,
     required: true,
-    default: 'pending'
+    default: 'pending',
   },
   password: {
     type: String,
