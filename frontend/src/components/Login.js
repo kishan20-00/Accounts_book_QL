@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -15,8 +15,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // For password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Use navigate for routing
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,8 +33,25 @@ export default function Login() {
       );
       const { token, user } = response.data;
       console.log("Login successful:", user);
+
       localStorage.setItem("token", token); // Save token in local storage
-      alert("Login successful!");
+
+      // Check the request status and user role
+      if (user.request === "pending") {
+        navigate("/waiting"); // Redirect to the waiting page
+      } else if (user.request === "accepted") {
+        if (user.user === "admin") {
+          navigate("/admin"); // Redirect to the admin dashboard
+        } else if (user.user === "owner") {
+          navigate("/owner"); // Redirect to the owner page
+        } else if (user.user === "user") {
+          navigate("/user"); // Redirect to the user page
+        } else {
+          setError("Invalid user role"); // Handle unexpected roles
+        }
+      } else {
+        setError("Invalid request status"); // Handle unexpected request statuses
+      }
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");
     }
