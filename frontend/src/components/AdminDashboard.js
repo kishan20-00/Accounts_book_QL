@@ -16,14 +16,14 @@ import {
 import { Menu as MenuIcon } from "@mui/icons-material";
 
 export default function AdminDashboard() {
-  const [open, setOpen] = useState(true); // Sidebar is open by default
+  const [open, setOpen] = useState(false); // Sidebar is closed by default
 
   // Sidebar width
   const drawerWidth = 240;
 
   // Toggle sidebar open/close
   const toggleDrawer = () => {
-    setOpen(!open);
+    setOpen((prev) => !prev);
   };
 
   return (
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={open} // Sidebar only opens when `open` is true
       >
         <Box>
           <List>
@@ -48,7 +48,6 @@ export default function AdminDashboard() {
               <ListItemText primary="Admin Dashboard" />
             </ListItem>
             <Divider />
-            {/* User Permissions Button */}
             <ListItem button component={Link} to="/user-permissions">
               <ListItemText primary="User Permissions" />
             </ListItem>
@@ -62,8 +61,6 @@ export default function AdminDashboard() {
           flexGrow: 1,
           backgroundColor: "#f4f4f4",
           minHeight: "100vh",
-          ml: open ? `${drawerWidth}px` : 0, // Margin left adjusts based on sidebar state
-          transition: "margin 0.3s ease-in-out",
         }}
       >
         {/* AppBar */}
@@ -78,7 +75,7 @@ export default function AdminDashboard() {
             <IconButton
               color="inherit"
               edge="start"
-              onClick={toggleDrawer}
+              onClick={toggleDrawer} // Toggles the sidebar
               sx={{ mr: 2 }}
             >
               <MenuIcon />
