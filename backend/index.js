@@ -22,8 +22,10 @@ app.get('/', (req, res) => {
   res.send('Hello to Vercel!');
 });
 
-// Routes
+// User Routes
 app.use('/api/auth', require('./routes/auth'));
+// Month Routes
+app.use('/api/month', require('./routes/MonthRoutes.js'));
 
 // Export the app (for Vercel compatibility)
 module.exports = app;
