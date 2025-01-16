@@ -65,33 +65,73 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Route to get all users after logging in
-router.post('/users', async (req, res) => {
-  const { email, password } = req.body;
+// Route to get all users (GET request) after verifying JWT token and checking admin role
+router.get('/users', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1]; // Bearer <token>
 
-  try {
-    // Find the user by email
-    const loggedInUser = await User.findOne({ email });
-    if (!loggedInUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Verify the password
-    const isMatch = await bcrypt.compare(password, loggedInUser.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Check if the user role is admin
-    if (loggedInUser.user !== 'admin') {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
-    // Fetch all users (excluding passwords)
-    const users = await User.find({}, '-password');
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
   }
+
+  // Verify the token and extract the user information
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid or expired token' });
+    }
+
+    try {
+      const loggedInUser = await User.findById(decoded.id); // Get the user from decoded token
+      if (loggedInUser.user !== 'admin') {
+        return res.status(403).json({ message: 'Access denied. Admins only.' });
+      }
+
+      // Fetch all users (excluding passwords)
+      const users = await User.find({}, '-password');
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  });
 });
+
+// Route to update the request status of a user (Admin only)
+router.patch('/users/:id/request', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1]; // Bearer <token>
+  const { id } = req.params; // User ID to update
+  const { request } = req.body; // New request status
+
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  // Verify the token and check admin role
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid or expired token' });
+    }
+
+    try {
+      const loggedInUser = await User.findById(decoded.id);
+      if (loggedInUser.user !== 'admin') {
+        return res.status(403).json({ message: 'Access denied. Admins only.' });
+      }
+
+      // Update the user's request status
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { request },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.json({ message: 'User request status updated successfully', user: updatedUser });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  });
+});
+
 module.exports = router;
