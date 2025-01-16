@@ -39,7 +39,7 @@ export default function UserPermissions() {
           return;
         }
 
-        const response = await axios.get("http://localhost:5000/api/auth/users", {
+        const response = await axios.get("https://accounts-book-ql.vercel.app/api/auth/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -83,7 +83,7 @@ export default function UserPermissions() {
       }
 
       const response = await axios.patch(
-        `http://localhost:5000/api/auth/users/${selectedUser._id}/request`,
+        `https://accounts-book-ql.vercel.app/api/auth/users/${selectedUser._id}/request`,
         { request: requestStatus },
         {
           headers: {
