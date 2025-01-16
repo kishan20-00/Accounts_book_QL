@@ -8,6 +8,9 @@ import UserPermissions from "./UserPermissions";
 import WaitingPage from "./Waitingpage";
 import CreateMonth from "./AddMonth";
 import ViewAllMonths from "./ViewMonths";
+import CreateBudgetPlan from "./AddBudget"
+import ViewBudgetPlans from "./ViewBudgets";
+import UpdateBudgetPlan from "./UpdateBudgets";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route path="/waiting" element={<WaitingPage />} />
           <Route path="/addmonth" element={<CreateMonth />} />
           <Route path="/viewmonth" element={<ViewAllMonths />} />
+          <Route path="/viewbudget" element={<ViewBudgetPlans />} />
+          <Route path="/addbudget" element={<CreateBudgetPlan />} />
+          <Route path="/updatebudget/:id" element={<UpdateBudgetPlan />} />
         </Routes>
       </div>
     </Router>

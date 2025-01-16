@@ -57,6 +57,12 @@ export default function AdminDashboard() {
             <ListItem button component={Link} to="/viewmonth">
               <ListItemText primary="View Months" />
             </ListItem>
+            <ListItem button component={Link} to="/addbudget">
+              <ListItemText primary="Create Budget Plan" />
+            </ListItem>
+            <ListItem button component={Link} to="/viewbudget">
+              <ListItemText primary="View Budgets" />
+            </ListItem>
           </List>
         </Box>
       </Drawer>
