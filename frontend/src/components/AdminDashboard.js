@@ -51,6 +51,12 @@ export default function AdminDashboard() {
             <ListItem button component={Link} to="/user-permissions">
               <ListItemText primary="User Permissions" />
             </ListItem>
+            <ListItem button component={Link} to="/addmonth">
+              <ListItemText primary="Create Month" />
+            </ListItem>
+            <ListItem button component={Link} to="/viewmonth">
+              <ListItemText primary="View Months" />
+            </ListItem>
           </List>
         </Box>
       </Drawer>

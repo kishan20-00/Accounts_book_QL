@@ -6,6 +6,8 @@ import "./App.css";
 import AdminDashboard from "./AdminDashboard";
 import UserPermissions from "./UserPermissions";
 import WaitingPage from "./Waitingpage";
+import CreateMonth from "./AddMonth";
+import ViewAllMonths from "./ViewMonths";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/user-permissions" element={<UserPermissions />} />
           <Route path="/waiting" element={<WaitingPage />} />
+          <Route path="/addmonth" element={<CreateMonth />} />
+          <Route path="/viewmonth" element={<ViewAllMonths />} />
         </Routes>
       </div>
     </Router>
