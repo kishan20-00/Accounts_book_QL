@@ -65,4 +65,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Route to get all users after logging in
+router.post('/users', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user by email
+    const loggedInUser = await User.findOne({ email });
+    if (!loggedInUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Verify the password
+    const isMatch = await bcrypt.compare(password, loggedInUser.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Check if the user role is admin
+    if (loggedInUser.user !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
+    // Fetch all users (excluding passwords)
+    const users = await User.find({}, '-password');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 module.exports = router;
