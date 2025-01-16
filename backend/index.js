@@ -26,6 +26,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 // Month Routes
 app.use('/api/month', require('./routes/MonthRoutes.js'));
+// Budget Routes
+app.use('/api/budget', require('./routes/budgetPlanRoutes.js'));
 
 // Export the app (for Vercel compatibility)
 module.exports = app;
