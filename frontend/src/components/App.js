@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import "./App.css";
 import AdminDashboard from "./AdminDashboard";
 import UserPermissions from "./UserPermissions";
+import WaitingPage from "./Waitingpage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/user-permissions" element={<UserPermissions />} />
+          <Route path="/waiting" element={<WaitingPage />} />
         </Routes>
       </div>
     </Router>
